@@ -1,0 +1,44 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Vanity Creek",
+    "theme_version": "1.0.0",
+    "theme_author": "Your Name",
+    "theme_documentation_url": "https://github.com/your-username/your-repo",
+    "theme_support_url": "https://github.com/your-username/your-repo/issues"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "primary_color",
+        "label": "Primary Color",
+        "default": "#2c5530"
+      },
+      {
+        "type": "color",
+        "id": "secondary_color",
+        "label": "Secondary Color",
+        "default": "#1a4021"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "heading_font",
+        "label": "Headings",
+        "default": "playfair_display_n7"
+      },
+      {
+        "type": "font_picker",
+        "id": "body_font",
+        "label": "Body text",
+        "default": "roboto_slab_n4"
+      }
+    ]
+  }
+]

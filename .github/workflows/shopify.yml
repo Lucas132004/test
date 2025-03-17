@@ -1,0 +1,38 @@
+name: Shopify Theme Deployment
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build theme
+      run: npm run build:theme
+      env:
+        VITE_SHOPIFY_STORE_URL: ${{vanitycreek.myshopify.com }}
+        VITE_SHOPIFY_ACCESS_TOKEN: ${{ 1a71accfc65f6b79b69a22ac31c98931 }}
+        VITE_SHOPIFY_STORE_DOMAIN: ${{ vanitycreek.myshopify.com }}
+
+    - name: Deploy to Shopify
+      uses: shopify/theme-deploy-action@v1
+      with:
+        password: ${{ 7e81a71465f38c57faaf52f7b79b9332 }}
+        store: ${{vanitycreek.myshopify.com  }}
+        path: theme
+        role: development

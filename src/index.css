@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Amatic+SC:wght@700&family=Roboto+Slab:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Roboto Slab', serif;
+    @apply bg-gradient-to-b from-forest-50 to-forest-100;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    @apply text-forest-700;
+  }
+
+  button {
+    @apply transition-all duration-300;
+  }
+}
+
+.logo-font {
+  font-family: 'Amatic SC', cursive;
+  font-weight: 700;
+}
+
+/* Nature-inspired gradients */
+.nature-gradient {
+  @apply bg-gradient-to-r from-forest-600 via-ocean-600 to-forest-700;
+}
+
+.sand-gradient {
+  @apply bg-gradient-to-r from-sand-400 via-sand-500 to-sand-600;
+}
+
+/* Overlay gradients */
+.overlay-gradient {
+  @apply bg-gradient-to-t from-black/60 via-black/30 to-transparent;
+}
