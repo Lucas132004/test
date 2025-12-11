@@ -1,21 +1,25 @@
 import { GraphQLClient } from 'graphql-request';
 
-// Check if environment variables are set
-if (!import.meta.env.VITE_SHOPIFY_STORE_URL || !import.meta.env.VITE_SHOPIFY_ACCESS_TOKEN) {
-  throw new Error('Shopify configuration is missing. Please set VITE_SHOPIFY_STORE_URL and VITE_SHOPIFY_ACCESS_TOKEN in your .env file');
-}
-
 const endpoint = import.meta.env.VITE_SHOPIFY_STORE_URL;
 const accessToken = import.meta.env.VITE_SHOPIFY_ACCESS_TOKEN;
 
-const shopifyClient = new GraphQLClient(endpoint, {
-  headers: {
-    'X-Shopify-Storefront-Access-Token': accessToken,
-    'Content-Type': 'application/json',
-  },
-});
+const isShopifyConfigured = endpoint && accessToken;
+
+const shopifyClient = isShopifyConfigured
+  ? new GraphQLClient(endpoint, {
+      headers: {
+        'X-Shopify-Storefront-Access-Token': accessToken,
+        'Content-Type': 'application/json',
+      },
+    })
+  : null;
 
 export const getProducts = async (collectionHandle: string) => {
+  if (!isShopifyConfigured || !shopifyClient) {
+    console.warn('Shopify is not configured. Returning empty product list.');
+    return [];
+  }
+
   const query = `
     query GetProducts($handle: String!) {
       collection(handle: $handle) {
@@ -71,6 +75,10 @@ export const getProducts = async (collectionHandle: string) => {
 };
 
 export const addToCart = async (variantId: string) => {
+  if (!isShopifyConfigured || !shopifyClient) {
+    throw new Error('Shopify is not configured. Please set up your Shopify store credentials.');
+  }
+
   const mutation = `
     mutation CreateCart($variantId: ID!) {
       cartCreate(
@@ -91,11 +99,11 @@ export const addToCart = async (variantId: string) => {
 
   try {
     const data = await shopifyClient.request(mutation, { variantId });
-    
+
     if (data.cartCreate.userErrors.length > 0) {
       throw new Error(data.cartCreate.userErrors[0].message);
     }
-    
+
     return data.cartCreate.cart.checkoutUrl;
   } catch (error) {
     console.error('Error adding to cart:', error);
@@ -107,6 +115,11 @@ export const addToCart = async (variantId: string) => {
 };
 
 export const getProduct = async (handle: string) => {
+  if (!isShopifyConfigured || !shopifyClient) {
+    console.warn('Shopify is not configured. Returning null.');
+    return null;
+  }
+
   const query = `
     query GetProduct($handle: String!) {
       product(handle: $handle) {
